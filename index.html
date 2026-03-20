@@ -134,6 +134,10 @@ body {
   background: var(--white);
   border-bottom: 1px solid var(--gray-100);
   padding: 0 48px;
+  position: sticky;
+  top: 64px;
+  z-index: 99;
+  box-shadow: var(--shadow-sm);
 }
 .nav-tabs {
   display: flex;
@@ -833,6 +837,7 @@ const D = {
     { n: 'Salário Hanon (50% · 1 mês)',   v: 15000 * 0.50 },
     { n: 'Salário Marcelo (50% · 1 mês)', v: 7500  * 0.50 },
     { n: 'Salário Samir (50% · 1 mês)',   v: 24000 * 0.50 },
+    { n: 'Aluguel do espaço (8 encontros × R$ 1.500)', v: 12000.00 },
   ],
 };
 
