@@ -3,728 +3,849 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DRE — Capacitação Psicanálise para a Vida</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>DRE · Psicanálise para a Vida</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:           #fafaf8;
-    --surface:      #ffffff;
-    --surface2:     #f5f4f0;
-    --border:       #e4e2db;
-    --border-mid:   #d0cec6;
-    --ink:          #1a1916;
-    --ink-mid:      #4a4840;
-    --ink-light:    #8a8778;
-    --ink-faint:    #b8b6ae;
-    --green:        #2d7a4f;
-    --green-bg:     #edf6f1;
-    --red:          #b84040;
-    --red-bg:       #fdf0f0;
-    --amber:        #b06820;
-    --amber-bg:     #fdf4ea;
-    --blue:         #2860a8;
-    --blue-bg:      #eef3fc;
-    --accent:       #5c4a8a;
-    --accent-bg:    #f2f0f8;
-    --radius:       3px;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white:      #ffffff;
+  --off:        #f7f7f5;
+  --gray-50:    #f2f2ef;
+  --gray-100:   #e8e8e4;
+  --gray-200:   #d4d4ce;
+  --gray-400:   #6b6b63;
+  --gray-600:   #3e3e38;
+  --gray-800:   #1e1e1a;
+  --black:      #111110;
 
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-  }
+  --emerald:    #0f7b55;
+  --emerald-lt: #e8f5f0;
+  --emerald-md: #c2e4d8;
+  --rose:       #c0392b;
+  --rose-lt:    #fdf0ee;
+  --rose-md:    #f5c6c2;
+  --amber:      #b45309;
+  --amber-lt:   #fdf6e8;
+  --amber-md:   #f0d9a8;
+  --blue:       #1d4ed8;
+  --blue-lt:    #eff3fe;
 
-  /* ─── HEADER ─── */
-  .header {
-    background: var(--surface);
-    border-bottom: 2px solid var(--ink);
-    padding: 36px 52px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 24px;
-  }
-  .header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.75rem;
-    color: var(--ink);
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    max-width: 440px;
-  }
-  .header h1 em {
-    font-style: italic;
-    color: var(--accent);
-  }
-  .header-meta {
-    text-align: right;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--ink-light);
-    line-height: 2;
-    letter-spacing: 0.04em;
-  }
-  .header-meta strong { color: var(--ink-mid); font-weight: 500; }
+  --font-display: 'Figtree', Arial, sans-serif;
+  --font-body:    'Figtree', Arial, sans-serif;
 
-  /* ─── NAV ─── */
-  .nav {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 52px;
-    display: flex;
-    gap: 0;
-    overflow-x: auto;
-  }
-  .tab {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.63rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    padding: 13px 20px 11px;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .tab:hover { color: var(--ink-mid); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.07), 0 2px 6px rgba(0,0,0,.05);
+  --r: 8px;
+}
 
-  /* ─── LAYOUT ─── */
-  .main { padding: 36px 52px 72px; max-width: 1100px; }
-  .panel { display: none; }
-  .panel.active { display: block; animation: up 0.3s ease; }
-  @keyframes up { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+html { font-size: 15px; }
+body {
+  background: var(--off);
+  color: var(--black);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
 
-  /* ─── ACTIONS ─── */
-  .actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-    margin-bottom: 28px;
-  }
-  .btn {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    border: 1px solid var(--border-mid);
-    background: var(--surface);
-    color: var(--ink-light);
-    cursor: pointer;
-    transition: all 0.15s;
-    border-radius: var(--radius);
-  }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn.primary { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+/* ─── TOPBAR ─────────────────────────────── */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-100);
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-icon {
+  width: 34px; height: 34px;
+  background: var(--black);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.brand-icon svg { width: 18px; height: 18px; }
+.brand-name {
+  font-family: var(--font-display);
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--black);
+  letter-spacing: -.01em;
+}
+.brand-sub {
+  font-size: .72rem;
+  color: var(--gray-400);
+  margin-top: 1px;
+}
+.topbar-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .72rem;
+  color: var(--gray-600);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+.meta-pill .dot-live {
+  width: 6px; height: 6px;
+  background: var(--amber);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+.btn-export {
+  font-family: var(--font-display);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--white);
+  background: var(--black);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-export:hover { background: var(--gray-800); }
 
-  /* ─── KPI STRIP ─── */
-  .kpis {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 32px;
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .kpi {
-    background: var(--surface);
-    padding: 20px 22px 18px;
-    position: relative;
-  }
-  .kpi::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-  .kpi.k-green::after  { background: var(--green); }
-  .kpi.k-red::after    { background: var(--red); }
-  .kpi.k-amber::after  { background: var(--amber); }
-  .kpi.k-accent::after { background: var(--accent); }
+/* ─── NAV TABS ───────────────────────────── */
+.nav-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-100);
+  padding: 0 48px;
+}
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+}
+.nav-tab {
+  font-family: var(--font-display);
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--gray-400);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 14px 18px 12px;
+  cursor: pointer;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.nav-tab:hover { color: var(--gray-600); }
+.nav-tab.active { color: var(--black); border-bottom-color: var(--black); }
 
-  .kpi-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 10px;
-  }
-  .kpi-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.45rem;
-    line-height: 1;
-    letter-spacing: -0.01em;
-  }
-  .kpi.k-green .kpi-val  { color: var(--green); }
-  .kpi.k-red .kpi-val    { color: var(--red); }
-  .kpi.k-amber .kpi-val  { color: var(--amber); }
-  .kpi.k-accent .kpi-val { color: var(--accent); }
+/* ─── PAGE LAYOUT ────────────────────────── */
+.page { padding: 32px 48px 80px; max-width: 1120px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; animation: fadeIn .25s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
-  .kpi-sub {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.62rem;
-    color: var(--ink-faint);
-    margin-top: 6px;
-  }
-  .kpi-sub b { color: var(--ink-light); }
+/* ─── ALERT BANNER ───────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--amber-lt);
+  border: 1px solid var(--amber-md);
+  border-radius: var(--r);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-size: .8rem;
+  color: var(--amber);
+  line-height: 1.55;
+}
+.alert-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.alert strong { font-weight: 600; }
 
-  /* ─── DRE SECTIONS ─── */
-  .dre-block { margin-bottom: 4px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+/* ─── KPI GRID ───────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--r);
+  padding: 20px 22px 18px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .2s;
+}
+.kpi-card:hover { box-shadow: var(--shadow-md); }
+.kpi-accent-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+.kpi-tag {
+  font-family: var(--font-display);
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+}
+.kpi-amount {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.kpi-caption {
+  font-size: .72rem;
+  color: var(--gray-400);
+  margin-top: 7px;
+}
+.kpi-caption b { color: var(--gray-600); font-weight: 500; }
 
-  .dre-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 13px 20px;
-    background: var(--surface);
-    cursor: pointer;
-    user-select: none;
-    transition: background 0.1s;
-    border-bottom: 1px solid var(--border);
-  }
-  .dre-head:hover { background: var(--surface2); }
+/* colors */
+.c-emerald { color: var(--emerald); }
+.c-rose    { color: var(--rose); }
+.c-amber   { color: var(--amber); }
+.c-blue    { color: var(--blue); }
+.bg-emerald { background: var(--emerald); }
+.bg-rose    { background: var(--rose); }
+.bg-amber   { background: var(--amber); }
+.bg-blue    { background: var(--blue); }
 
-  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .dot-g { background: var(--green); }
-  .dot-r { background: var(--red); }
-  .dot-a { background: var(--amber); }
+/* ─── DRE ACCORDION ──────────────────────── */
+.dre-group { margin-bottom: 6px; }
 
-  .dre-head-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.63rem;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--ink-mid);
-    flex: 1;
-  }
-  .dre-head-total {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    letter-spacing: -0.01em;
-  }
-  .ht-g { color: var(--green); }
-  .ht-r { color: var(--red); }
-  .ht-a { color: var(--amber); }
+.acc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--r);
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s, box-shadow .12s;
+  box-shadow: var(--shadow-sm);
+}
+.acc-header:hover { background: var(--gray-50); }
+.dre-group.open .acc-header {
+  border-radius: var(--r) var(--r) 0 0;
+  border-bottom-color: var(--gray-50);
+}
 
-  .toggle { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); margin-left: 10px; transition: transform 0.2s; }
-  .collapsed .toggle { transform: rotate(-90deg); }
-  .collapsed .dre-items { display: none; }
+.acc-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.acc-label {
+  font-family: var(--font-display);
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  flex: 1;
+  letter-spacing: -.01em;
+}
+.acc-badge {
+  font-size: .72rem;
+  color: var(--gray-400);
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+.acc-total {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  min-width: 150px;
+  text-align: right;
+}
+.acc-chevron {
+  color: var(--gray-400);
+  font-size: .7rem;
+  transition: transform .2s;
+  margin-left: 4px;
+}
+.dre-group.open .acc-chevron { transform: rotate(180deg); }
 
-  .dre-items { background: var(--surface); }
+.acc-body {
+  display: none;
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-top: none;
+  border-radius: 0 0 var(--r) var(--r);
+  overflow: hidden;
+}
+.dre-group.open .acc-body { display: block; }
 
-  .dre-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 9px 20px 9px 32px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-    transition: background 0.1s;
-  }
-  .dre-row:last-child { border-bottom: none; }
-  .dre-row:hover { background: var(--surface2); }
+.acc-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 160px;
+  align-items: center;
+  padding: 10px 20px 10px 36px;
+  border-bottom: 1px solid var(--gray-50);
+  transition: background .1s;
+  gap: 12px;
+}
+.acc-row:last-child { border-bottom: none; }
+.acc-row:hover { background: var(--gray-50); }
 
-  .row-name {
-    font-size: 0.8rem;
-    color: var(--ink-mid);
-    flex: 1;
-  }
-  .row-pct {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--ink-faint);
-    width: 52px;
-    text-align: right;
-  }
-  .row-val {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--ink);
-    width: 140px;
-    text-align: right;
-  }
-  .row-val.neg { color: var(--red); }
+.row-label { font-size: .82rem; color: var(--gray-600); }
+.row-share {
+  font-size: .72rem;
+  color: var(--gray-400);
+  text-align: right;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+.row-amount {
+  font-size: .82rem;
+  color: var(--gray-800);
+  text-align: right;
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+.row-amount.neg { color: var(--rose); }
 
-  /* ─── SUBTOTAIS ─── */
-  .subtotal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px 20px;
-    margin: 6px 0;
-    border-radius: var(--radius);
-  }
-  .st-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.63rem;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-  }
-  .st-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    letter-spacing: -0.01em;
-  }
-  .st-green { background: var(--green-bg); border-left: 3px solid var(--green); }
-  .st-green .st-label { color: var(--green); }
-  .st-green .st-val   { color: var(--green); }
-  .st-amber { background: var(--amber-bg); border-left: 3px solid var(--amber); }
-  .st-amber .st-label { color: var(--amber); }
-  .st-amber .st-val   { color: var(--amber); }
-  .st-blue  { background: var(--blue-bg); border-left: 3px solid var(--blue); }
-  .st-blue  .st-label { color: var(--blue); }
-  .st-blue  .st-val   { color: var(--blue); }
+/* ─── SUBTOTAL BARS ──────────────────────── */
+.subtotal-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  border-radius: var(--r);
+  margin: 8px 0;
+}
+.st-label {
+  font-family: var(--font-display);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.st-value {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -.015em;
+}
+.st-emerald { background: var(--emerald-lt); border: 1px solid var(--emerald-md); }
+.st-emerald .st-label { color: var(--emerald); }
+.st-emerald .st-value { color: var(--emerald); }
+.st-amber { background: var(--amber-lt); border: 1px solid var(--amber-md); }
+.st-amber .st-label { color: var(--amber); }
+.st-amber .st-value { color: var(--amber); }
 
-  /* ─── RESULTADO ─── */
-  .resultado {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 28px;
-    margin-top: 8px;
-    background: var(--surface);
-    border: 2px solid var(--ink);
-    border-radius: var(--radius);
-    position: relative;
-    overflow: hidden;
-  }
-  .resultado::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 4px;
-  }
-  .resultado.pos::before { background: var(--green); }
-  .resultado.neg::before { background: var(--red); }
+/* ─── RESULTADO FINAL ────────────────────── */
+.resultado-card {
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--r);
+  padding: 28px 28px;
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+.resultado-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 5px;
+}
+.res-positive::before { background: var(--emerald); }
+.res-negative::before { background: var(--rose); }
 
-  .res-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-mid);
-  }
-  .res-label .sub {
-    display: block;
-    font-size: 0.58rem;
-    color: var(--ink-faint);
-    margin-top: 4px;
-  }
-  .res-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    letter-spacing: -0.02em;
-    line-height: 1;
-  }
-  .res-val.pos { color: var(--green); }
-  .res-val.neg { color: var(--red); }
-  .res-pct {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    margin-top: 6px;
-    text-align: right;
-  }
+.res-meta { padding-left: 8px; }
+.res-eyebrow {
+  font-family: var(--font-display);
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 4px;
+}
+.res-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  letter-spacing: -.01em;
+}
+.res-sub {
+  font-size: .75rem;
+  color: var(--gray-400);
+  margin-top: 3px;
+  font-style: italic;
+}
+.res-numbers { text-align: right; }
+.res-amount {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.res-pct {
+  font-family: var(--font-display);
+  font-size: .75rem;
+  font-weight: 500;
+  margin-top: 6px;
+  color: var(--gray-400);
+}
 
-  /* ─── AVISO ─── */
-  .aviso {
-    background: #fffbea;
-    border: 1px solid #e8d070;
-    border-left: 3px solid #c9a830;
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    font-size: 0.76rem;
-    color: #7a6020;
-    margin-bottom: 20px;
-    font-family: 'IBM Plex Sans', sans-serif;
-    line-height: 1.6;
-  }
-  .aviso strong { font-weight: 600; }
+/* ─── VISUAL PANEL ───────────────────────── */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--r);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.chart-card.full { grid-column: 1 / -1; }
+.chart-label {
+  font-family: var(--font-display);
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 20px;
+}
 
-  /* ─── ANÁLISE VISUAL ─── */
-  .chart-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 16px;
-  }
-  .chart-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--ink-light);
-    margin-bottom: 20px;
-  }
+/* Waterfall */
+.wf-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 210px;
+  padding-bottom: 30px;
+  position: relative;
+}
+.wf-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 30px; left: 0; right: 0;
+  height: 1px;
+  background: var(--gray-100);
+}
+.wf-col { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; }
+.wf-inner { width: 100%; position: relative; height: 180px; }
+.wf-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  min-height: 3px;
+  transition: opacity .15s;
+}
+.wf-bar:hover { opacity: .8; }
+.wf-bar.we { background: var(--emerald); }
+.wf-bar.wr { background: var(--rose); }
+.wf-bar.wa { background: var(--amber); }
+.wf-lbl {
+  position: absolute;
+  bottom: -26px;
+  left: 50%; transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: .52rem;
+  font-weight: 600;
+  color: var(--gray-400);
+  white-space: nowrap;
+  text-align: center;
+  letter-spacing: .02em;
+}
+.wf-num {
+  position: absolute;
+  top: -18px;
+  left: 50%; transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: .58rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
-  /* Cascata */
-  .waterfall {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    height: 200px;
-    padding-bottom: 28px;
-    position: relative;
-  }
-  .waterfall::after {
-    content: '';
-    position: absolute;
-    bottom: 28px; left: 0; right: 0;
-    height: 1px;
-    background: var(--border-mid);
-  }
-  .wf-col { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
-  .wf-bar {
-    width: 100%;
-    border-radius: 2px 2px 0 0;
-    position: absolute;
-    bottom: 0;
-    min-height: 3px;
-    transition: opacity 0.15s;
-  }
-  .wf-bar:hover { opacity: 0.8; }
-  .wf-bar.bg { background: var(--green); }
-  .wf-bar.br { background: var(--red); }
-  .wf-bar.ba { background: var(--amber); }
-  .wf-bar.bp { background: var(--accent); }
-  .wf-wrap { width: 100%; position: relative; height: 172px; }
-  .wf-lbl {
-    position: absolute; bottom: -24px;
-    left: 50%; transform: translateX(-50%);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.5rem; color: var(--ink-faint);
-    white-space: nowrap; letter-spacing: 0.04em;
-    text-align: center;
-  }
-  .wf-num {
-    position: absolute; top: -17px;
-    left: 50%; transform: translateX(-50%);
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.55rem; white-space: nowrap;
-  }
-  .wf-num.ng { color: var(--green); }
-  .wf-num.nr { color: var(--red); }
-  .wf-num.na { color: var(--amber); }
-  .wf-num.np { color: var(--accent); }
+/* Horizontal bars */
+.hb-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.hb-name { font-size: .76rem; color: var(--gray-600); width: 185px; flex-shrink: 0; line-height: 1.3; }
+.hb-track { flex: 1; height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
+.hb-fill  { height: 100%; border-radius: 3px; }
+.hb-pct   { font-family: var(--font-display); font-size: .65rem; font-weight: 600; color: var(--gray-400); width: 36px; text-align: right; }
+.hb-val   { font-family: var(--font-display); font-size: .65rem; font-weight: 500; color: var(--gray-600); width: 95px; text-align: right; }
 
-  /* Barras horizontais */
-  .hbar-row {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 9px;
-  }
-  .hbar-name { font-size: 0.74rem; color: var(--ink-mid); width: 190px; flex-shrink: 0; }
-  .hbar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
-  .hbar-fill  { height: 100%; border-radius: 3px; }
-  .hbar-pct   { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--ink-faint); width: 42px; text-align: right; }
-  .hbar-val   { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--ink-light); width: 90px; text-align: right; }
+/* ─── MARGENS PANEL ──────────────────────── */
+.mg-table {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+}
+.mg-thead {
+  display: grid;
+  grid-template-columns: 1.6fr 140px 100px 100px 80px;
+  padding: 10px 20px;
+  background: var(--gray-50);
+  border-bottom: 1px solid var(--gray-100);
+}
+.mg-thead span {
+  font-family: var(--font-display);
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  text-align: right;
+}
+.mg-thead span:first-child { text-align: left; }
+.mg-row {
+  display: grid;
+  grid-template-columns: 1.6fr 140px 100px 100px 80px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--gray-50);
+  transition: background .1s;
+  align-items: center;
+}
+.mg-row:last-child { border-bottom: none; }
+.mg-row:hover { background: var(--gray-50); }
+.mg-row.highlight { background: var(--gray-50); }
+.mg-row span {
+  font-family: var(--font-display);
+  font-size: .75rem;
+  font-weight: 500;
+  color: var(--gray-400);
+  text-align: right;
+}
+.mg-row span:first-child {
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 400;
+  color: var(--gray-800);
+  text-align: left;
+}
+.mg-row span.hi  { color: var(--black); font-weight: 700; }
+.mg-row span.pos { color: var(--emerald); }
+.mg-row span.neg { color: var(--rose); }
+.mg-row span.ref { color: var(--gray-400); font-size: .68rem; font-weight: 400; }
 
-  /* ─── MARGENS ─── */
-  .mt {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-  .mt-head {
-    display: grid;
-    grid-template-columns: 1fr 130px 100px 100px 90px;
-    padding: 10px 20px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-  }
-  .mt-head span {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.58rem; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--ink-faint);
-    text-align: right;
-  }
-  .mt-head span:first-child { text-align: left; }
-  .mt-row {
-    display: grid;
-    grid-template-columns: 1fr 130px 100px 100px 90px;
-    padding: 11px 20px;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.1s;
-  }
-  .mt-row:last-child { border-bottom: none; }
-  .mt-row:hover { background: var(--surface2); }
-  .mt-row span {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.73rem; color: var(--ink-light);
-    text-align: right;
-  }
-  .mt-row span:first-child { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8rem; color: var(--ink); text-align: left; font-weight: 400; }
-  .mt-row span.hi  { color: var(--accent); font-weight: 500; }
-  .mt-row span.pos { color: var(--green); }
-  .mt-row span.neg { color: var(--red); }
-  .mt-row span.ref { color: var(--ink-faint); font-size: 0.65rem; }
+.analysis-card {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--r);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.analysis-title {
+  font-family: var(--font-display);
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+}
+.analysis-body { font-size: .84rem; color: var(--gray-600); line-height: 1.75; }
 
-  /* ─── INTERPRETAÇÃO ─── */
-  .interp {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-  }
-  .interp-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ink-light);
-    margin-bottom: 14px;
-  }
-  .interp-body { font-size: 0.82rem; color: var(--ink-mid); line-height: 1.75; }
+/* ─── NOTAS PANEL ────────────────────────── */
+.nota-block {
+  background: var(--white);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--r);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+}
+.nota-title {
+  font-family: var(--font-display);
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 12px;
+}
+textarea.nota {
+  width: 100%;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-100);
+  border-radius: 6px;
+  color: var(--gray-800);
+  font-family: var(--font-body);
+  font-size: .82rem;
+  padding: 12px 14px;
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.65;
+  outline: none;
+  transition: border-color .2s;
+}
+textarea.nota:focus { border-color: var(--black); }
+textarea.nota::placeholder { color: var(--gray-400); }
 
-  /* ─── NOTAS ─── */
-  .nota-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-    margin-bottom: 14px;
-  }
-  .nota-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ink-light);
-    margin-bottom: 12px;
-  }
-  textarea.nota-input {
-    width: 100%; background: var(--bg);
-    border: 1px solid var(--border-mid); color: var(--ink);
-    font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.82rem; padding: 12px 14px;
-    resize: vertical; min-height: 110px;
-    line-height: 1.65; outline: none; border-radius: var(--radius);
-    transition: border-color 0.2s;
-  }
-  textarea.nota-input:focus { border-color: var(--accent); }
-  textarea.nota-input::placeholder { color: var(--ink-faint); }
+/* ─── RESPONSIVE ─────────────────────────── */
+@media (max-width: 860px) {
+  .topbar, .nav-wrap, .page { padding-left: 20px; padding-right: 20px; }
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .mg-thead, .mg-row { grid-template-columns: 1.4fr 120px 90px; }
+  .mg-thead span:nth-child(4), .mg-row span:nth-child(4),
+  .mg-thead span:nth-child(5), .mg-row span:nth-child(5) { display: none; }
+  .topbar-meta { display: none; }
+}
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 820px) {
-    .header, .nav, .main { padding-left: 20px; padding-right: 20px; }
-    .kpis { grid-template-columns: 1fr 1fr; }
-    .mt-head, .mt-row { grid-template-columns: 1fr 120px 90px; }
-    .mt-head span:nth-child(4), .mt-row span:nth-child(4),
-    .mt-head span:nth-child(5), .mt-row span:nth-child(5) { display: none; }
-  }
-
-  @media print {
-    .actions, .nav { display: none !important; }
-    body { background: white; }
-  }
+@media print {
+  .topbar, .nav-wrap, .btn-export { display: none !important; }
+  body { background: white; }
+  .page { padding: 20px; }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div>
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;">Demonstrativo de Resultado</div>
-    <h1>Capacitação <em>Psicanálise</em><br>para a Vida</h1>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+        <polyline points="16 7 22 7 22 13"></polyline>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">Capacitação · Psicanálise para a Vida</div>
+      <div class="brand-sub">Demonstrativo de Resultado do Exercício</div>
+    </div>
   </div>
-  <div class="header-meta">
-    Período: <strong>Jan – Mar / 2026</strong><br>
-    Elaborado: <strong id="hoje"></strong><br>
-    Status: <strong style="color:var(--amber);">⚠ Salários provisionados (1 mês)</strong>
+  <div class="topbar-meta">
+    <div class="meta-pill">
+      <span class="dot-live"></span>
+      Salários provisionados — 1 mês
+    </div>
+    <div class="meta-pill">
+      Jan – Mar / 2026
+    </div>
+    <button class="btn-export" onclick="window.print()">↓ Exportar PDF</button>
   </div>
-</div>
+</header>
 
-<div class="nav">
-  <button class="tab active" onclick="switchTab('dre',this)">DRE</button>
-  <button class="tab" onclick="switchTab('visual',this)">Visual</button>
-  <button class="tab" onclick="switchTab('margens',this)">Margens</button>
-  <button class="tab" onclick="switchTab('notas',this)">Notas</button>
-</div>
-
-<div class="main">
-
-  <div class="actions">
-    <button class="btn" onclick="window.print()">↓ Exportar PDF</button>
-    <button class="btn primary" onclick="render()">↺ Recalcular</button>
+<!-- NAV -->
+<nav class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="tab('dre',this)">DRE</button>
+    <button class="nav-tab" onclick="tab('visual',this)">Visual</button>
+    <button class="nav-tab" onclick="tab('margens',this)">Margens</button>
+    <button class="nav-tab" onclick="tab('notas',this)">Notas</button>
   </div>
+</nav>
 
-  <!-- ══ PAINEL DRE ══ -->
-  <div class="panel active" id="panel-dre">
+<!-- CONTEÚDO -->
+<main class="page">
 
-    <div class="aviso" id="aviso-bloco">
-      <strong>⚠ Provisório:</strong> salários lançados com base em 1 mês (50% de cada colaborador). Confirmar número de meses para valor definitivo.
+  <!-- ══ DRE ══════════════════════════════ -->
+  <section class="panel active" id="panel-dre">
+
+    <div class="alert">
+      <span class="alert-icon">⚠</span>
+      <span><strong>Provisório:</strong> salários lançados com base em 1 mês (50% de cada colaborador — Hanon, Marcelo e Samir). Confirmar período real para encerramento definitivo.</span>
     </div>
 
-    <div class="kpis" id="kpis"></div>
+    <div class="kpi-grid" id="kpi-grid"></div>
 
     <!-- Receita Bruta -->
-    <div class="dre-block">
-      <div class="dre-head" onclick="toggle(this)">
-        <span class="dot dot-g"></span>
-        <span class="dre-head-title">1 · Receita Bruta</span>
-        <span class="dre-head-total ht-g" id="h-rb">—</span>
-        <span class="toggle">▾</span>
+    <div class="dre-group open" id="g-rb">
+      <div class="acc-header" onclick="toggleGroup(this)">
+        <span class="acc-dot bg-emerald"></span>
+        <span class="acc-label">Receita Bruta</span>
+        <span class="acc-badge">3 lançamentos</span>
+        <span class="acc-total c-emerald" id="t-rb">—</span>
+        <span class="acc-chevron">▾</span>
       </div>
-      <div class="dre-items" id="i-rb"></div>
+      <div class="acc-body" id="b-rb"></div>
     </div>
 
     <!-- Deduções -->
-    <div class="dre-block">
-      <div class="dre-head" onclick="toggle(this)">
-        <span class="dot dot-r"></span>
-        <span class="dre-head-title">2 · Deduções e Impostos</span>
-        <span class="dre-head-total ht-r" id="h-ded">—</span>
-        <span class="toggle">▾</span>
+    <div class="dre-group open" id="g-ded">
+      <div class="acc-header" onclick="toggleGroup(this)">
+        <span class="acc-dot bg-rose"></span>
+        <span class="acc-label">Deduções e Impostos</span>
+        <span class="acc-badge">2 lançamentos</span>
+        <span class="acc-total c-rose" id="t-ded">—</span>
+        <span class="acc-chevron">▾</span>
       </div>
-      <div class="dre-items" id="i-ded"></div>
+      <div class="acc-body" id="b-ded"></div>
     </div>
 
-    <div class="subtotal st-green" id="st-rlv">
+    <div class="subtotal-bar st-emerald">
       <span class="st-label">= Receita Líquida (RLV)</span>
-      <span class="st-val">—</span>
+      <span class="st-value" id="st-rlv">—</span>
     </div>
 
     <!-- CPV -->
-    <div class="dre-block">
-      <div class="dre-head" onclick="toggle(this)">
-        <span class="dot dot-r"></span>
-        <span class="dre-head-title">3 · Custos do Produto (CPV)</span>
-        <span class="dre-head-total ht-r" id="h-cpv">—</span>
-        <span class="toggle">▾</span>
+    <div class="dre-group open" id="g-cpv">
+      <div class="acc-header" onclick="toggleGroup(this)">
+        <span class="acc-dot bg-rose"></span>
+        <span class="acc-label">Custos do Produto (CPV)</span>
+        <span class="acc-badge">3 lançamentos</span>
+        <span class="acc-total c-rose" id="t-cpv">—</span>
+        <span class="acc-chevron">▾</span>
       </div>
-      <div class="dre-items" id="i-cpv"></div>
+      <div class="acc-body" id="b-cpv"></div>
     </div>
 
-    <div class="subtotal st-amber" id="st-mb">
+    <div class="subtotal-bar st-amber">
       <span class="st-label">= Margem Bruta</span>
-      <span class="st-val">—</span>
+      <span class="st-value" id="st-mb">—</span>
     </div>
 
     <!-- Despesas Operacionais -->
-    <div class="dre-block">
-      <div class="dre-head" onclick="toggle(this)">
-        <span class="dot dot-r"></span>
-        <span class="dre-head-title">4 · Despesas Operacionais</span>
-        <span class="dre-head-total ht-r" id="h-despop">—</span>
-        <span class="toggle">▾</span>
+    <div class="dre-group open" id="g-despop">
+      <div class="acc-header" onclick="toggleGroup(this)">
+        <span class="acc-dot bg-rose"></span>
+        <span class="acc-label">Despesas Operacionais</span>
+        <span class="acc-badge">3 lançamentos</span>
+        <span class="acc-total c-rose" id="t-despop">—</span>
+        <span class="acc-chevron">▾</span>
       </div>
-      <div class="dre-items" id="i-despop"></div>
+      <div class="acc-body" id="b-despop"></div>
     </div>
 
-    <div class="resultado" id="resultado">
-      <div>
-        <div class="res-label">
-          Resultado Líquido
-          <span class="sub">Lucro / Prejuízo do Período</span>
-        </div>
+    <div class="resultado-card" id="res-card">
+      <div class="res-meta">
+        <div class="res-eyebrow">Linha final</div>
+        <div class="res-title">Resultado Líquido do Período</div>
+        <div class="res-sub">Jan – Mar / 2026 · Provisionado</div>
       </div>
-      <div style="text-align:right;">
-        <div class="res-val" id="res-val">—</div>
+      <div class="res-numbers">
+        <div class="res-amount" id="res-amount">—</div>
         <div class="res-pct" id="res-pct">—</div>
       </div>
     </div>
 
-  </div>
+  </section>
 
-  <!-- ══ PAINEL VISUAL ══ -->
-  <div class="panel" id="panel-visual">
-
-    <div class="chart-card">
-      <div class="chart-title">Cascata de Resultado</div>
-      <div class="waterfall" id="waterfall"></div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-      <div class="chart-card">
-        <div class="chart-title">Composição da Receita Bruta</div>
-        <div id="chart-rec"></div>
+  <!-- ══ VISUAL ════════════════════════════ -->
+  <section class="panel" id="panel-visual">
+    <div class="chart-grid">
+      <div class="chart-card full">
+        <div class="chart-label">Cascata de Resultado</div>
+        <div class="wf-wrap" id="wf"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Composição dos Custos Totais</div>
-        <div id="chart-cus"></div>
+        <div class="chart-label">Composição da Receita Bruta</div>
+        <div id="ch-rec"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Composição dos Custos Totais</div>
+        <div id="ch-cus"></div>
       </div>
     </div>
+  </section>
 
-  </div>
-
-  <!-- ══ PAINEL MARGENS ══ -->
-  <div class="panel" id="panel-margens">
-    <div class="mt">
-      <div class="mt-head">
+  <!-- ══ MARGENS ═══════════════════════════ -->
+  <section class="panel" id="panel-margens">
+    <div class="mg-table">
+      <div class="mg-thead">
         <span>Indicador</span>
         <span>R$</span>
         <span>% Rec. Bruta</span>
         <span>% RLV</span>
-        <span>Ref. Setor</span>
+        <span>Ref.</span>
       </div>
-      <div id="mt-rows"></div>
+      <div id="mg-rows"></div>
     </div>
-    <div class="interp">
-      <div class="interp-title">Análise</div>
-      <div class="interp-body" id="interp-body">—</div>
+    <div class="analysis-card">
+      <div class="analysis-title">Análise</div>
+      <div class="analysis-body" id="analysis-body">—</div>
     </div>
-  </div>
+  </section>
 
-  <!-- ══ PAINEL NOTAS ══ -->
-  <div class="panel" id="panel-notas">
-    <div class="nota-card">
-      <div class="nota-label">Notas e Observações</div>
-      <textarea class="nota-input" placeholder="Registre premissas, ajustes, contexto do produto, acordos comerciais, critérios de rateio...
+  <!-- ══ NOTAS ═════════════════════════════ -->
+  <section class="panel" id="panel-notas">
+    <div class="nota-block">
+      <div class="nota-title">Notas e Observações</div>
+      <textarea class="nota" placeholder="Registre premissas, ajustes, critérios de rateio, acordos comerciais ou contexto do produto...
 
-Ex: Salários provisionados em 1 mês. Aguardando confirmação da competência real para lançamento definitivo."></textarea>
+Ex: Salários provisionados em 1 mês (50%). Aguardando confirmação da competência real."></textarea>
     </div>
-    <div class="nota-card">
-      <div class="nota-label">Itens Pendentes / A Confirmar</div>
-      <textarea class="nota-input" style="min-height:80px;" placeholder="- Número de meses dos salários (Hanon, Marcelo, Samir)&#10;- Confirmar se taxas de pagamento já incluem todos os meses&#10;- Verificar custo de tráfego (informado como zero)"></textarea>
+    <div class="nota-block">
+      <div class="nota-title">Itens Pendentes</div>
+      <textarea class="nota" style="min-height:80px;" placeholder="— Confirmar número de meses dos salários (Hanon, Marcelo, Samir)&#10;— Verificar se taxas de pagamento cobrem os 3 meses integralmente&#10;— Custo de tráfego: confirmar se houve algum gasto"></textarea>
     </div>
-  </div>
+  </section>
 
-</div>
+</main>
 
 <script>
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 //  DADOS REAIS
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 const D = {
   receita_bruta: [
-    { n: 'Receita de Vendas — Jan/2026',  v: 189473.40 },
-    { n: 'Receita de Vendas — Fev/2026',  v: 58236.16  },
-    { n: 'Receita de Vendas — Mar/2026',  v: 8144.30   },
+    { n: 'Receita de Vendas — Jan/2026', v: 189473.40 },
+    { n: 'Receita de Vendas — Fev/2026', v: 58236.16  },
+    { n: 'Receita de Vendas — Mar/2026', v: 8144.30   },
   ],
   deducoes: [
     { n: 'Impostos (14% s/ receita bruta)', v: 255853.86 * 0.14 },
-    { n: 'Taxas de meios de pagamento',     v: 16406.58  },
+    { n: 'Taxas de meios de pagamento',     v: 16406.58          },
   ],
   cpv: [
-    { n: 'Mônica Veras (mentora)',          v: 23067.65  },
-    { n: 'Zoom',                            v: 729.00    },
+    { n: 'Mônica Veras — Mentora',          v: 23067.65          },
+    { n: 'Zoom',                             v: 729.00            },
     { n: 'Comissões (5% s/ receita bruta)', v: 255853.86 * 0.05 },
   ],
   despesas_op: [
-    { n: 'Salário Hanon (50% / 1 mês)',    v: 15000 * 0.50 },
-    { n: 'Salário Marcelo (50% / 1 mês)',  v: 7500  * 0.50 },
-    { n: 'Salário Samir (50% / 1 mês)',    v: 24000 * 0.50 },
+    { n: 'Salário Hanon (50% · 1 mês)',   v: 15000 * 0.50 },
+    { n: 'Salário Marcelo (50% · 1 mês)', v: 7500  * 0.50 },
+    { n: 'Salário Samir (50% · 1 mês)',   v: 24000 * 0.50 },
   ],
 };
 
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
 //  HELPERS
-// ═══════════════════════════════════════
-const R = v => 'R$ ' + v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-const P = (v,b) => b ? (v/b*100).toFixed(1)+'%' : '—';
-const S = a => a.reduce((t,x)=>t+(parseFloat(x.v)||0),0);
-const K = (v,b) => b ? (v/b*100).toFixed(1) : '—';
+// ═══════════════════════════════════════════
+const R  = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const Pn = (v, b) => b ? (v / b * 100).toFixed(1) + '%' : '—';
+const S  = a => a.reduce((t, x) => t + (parseFloat(x.v) || 0), 0);
 
-// ═══════════════════════════════════════
-//  RENDER PRINCIPAL
-// ═══════════════════════════════════════
+// ═══════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════
 function render() {
   const rb     = S(D.receita_bruta);
   const ded    = S(D.deducoes);
@@ -735,166 +856,162 @@ function render() {
   const res    = mb - despop;
 
   // KPIs
-  document.getElementById('kpis').innerHTML = `
-    <div class="kpi k-green">
-      <div class="kpi-label">Receita Bruta</div>
-      <div class="kpi-val">${R(rb)}</div>
-      <div class="kpi-sub">3 meses acumulados</div>
+  const kpis = [
+    { tag: 'Receita Bruta',       val: R(rb),   sub: '3 meses acumulados',              c: 'emerald' },
+    { tag: 'Deduções + Impostos', val: R(ded),  sub: `<b>${Pn(ded,rb)}</b> da rec. bruta`, c: 'rose' },
+    { tag: 'Margem Bruta',        val: R(mb),   sub: `<b>${Pn(mb,rb)}</b> da rec. bruta`,  c: 'amber' },
+    { tag: 'Resultado Líquido',   val: R(res),  sub: `<b>${Pn(res,rb)}</b> da rec. bruta`, c: res>=0?'emerald':'rose' },
+  ];
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k => `
+    <div class="kpi-card">
+      <div class="kpi-accent-bar bg-${k.c}"></div>
+      <div class="kpi-tag">${k.tag}</div>
+      <div class="kpi-amount c-${k.c}">${k.val}</div>
+      <div class="kpi-caption">${k.sub}</div>
     </div>
-    <div class="kpi k-red">
-      <div class="kpi-label">Total Deduções + Impostos</div>
-      <div class="kpi-val">${R(ded)}</div>
-      <div class="kpi-sub"><b>${P(ded,rb)}</b> da rec. bruta</div>
-    </div>
-    <div class="kpi k-amber">
-      <div class="kpi-label">Margem Bruta</div>
-      <div class="kpi-val">${R(mb)}</div>
-      <div class="kpi-sub"><b>${P(mb,rb)}</b> da rec. bruta</div>
-    </div>
-    <div class="kpi k-accent">
-      <div class="kpi-label">Resultado Líquido</div>
-      <div class="kpi-val" style="color:${res>=0?'var(--green)':'var(--red)'}">${R(res)}</div>
-      <div class="kpi-sub"><b>${P(res,rb)}</b> da rec. bruta</div>
-    </div>
-  `;
+  `).join('');
 
-  // Seções
-  renderRows('i-rb',     D.receita_bruta, rb, false);
-  renderRows('i-ded',    D.deducoes,      rb, true);
-  renderRows('i-cpv',    D.cpv,           rb, true);
-  renderRows('i-despop', D.despesas_op,   rb, true);
+  // Linhas
+  rows('b-rb',     D.receita_bruta, rb, false);
+  rows('b-ded',    D.deducoes,      rb, true);
+  rows('b-cpv',    D.cpv,           rb, true);
+  rows('b-despop', D.despesas_op,   rb, true);
 
-  document.getElementById('h-rb').textContent     = R(rb);
-  document.getElementById('h-ded').textContent    = '('+R(ded)+')';
-  document.getElementById('h-cpv').textContent    = '('+R(cpv)+')';
-  document.getElementById('h-despop').textContent = '('+R(despop)+')';
-
-  // Subtotais
-  document.querySelector('#st-rlv .st-val').textContent = R(rlv);
-  document.querySelector('#st-mb  .st-val').textContent = R(mb);
+  // Totais
+  document.getElementById('t-rb').textContent     = R(rb);
+  document.getElementById('t-ded').textContent    = '(' + R(ded) + ')';
+  document.getElementById('t-cpv').textContent    = '(' + R(cpv) + ')';
+  document.getElementById('t-despop').textContent = '(' + R(despop) + ')';
+  document.getElementById('st-rlv').textContent   = R(rlv);
+  document.getElementById('st-mb').textContent    = R(mb);
 
   // Resultado final
-  const rEl  = document.getElementById('res-val');
-  const rPct = document.getElementById('res-pct');
-  const rBox = document.getElementById('resultado');
-  rEl.textContent  = R(res);
-  rPct.textContent = P(res,rb) + ' da receita bruta';
-  rEl.className    = 'res-val ' + (res>=0?'pos':'neg');
-  rPct.style.color = res>=0 ? 'var(--green)' : 'var(--red)';
-  rBox.className   = 'resultado ' + (res>=0?'pos':'neg');
+  const rA = document.getElementById('res-amount');
+  const rP = document.getElementById('res-pct');
+  const rC = document.getElementById('res-card');
+  rA.textContent  = R(res);
+  rP.textContent  = Pn(res, rb) + ' da receita bruta';
+  rA.className    = 'res-amount ' + (res >= 0 ? 'c-emerald' : 'c-rose');
+  rP.style.color  = res >= 0 ? 'var(--emerald)' : 'var(--rose)';
+  rC.className    = 'resultado-card ' + (res >= 0 ? 'res-positive' : 'res-negative');
 
   // Visual
-  renderWaterfall(rb, ded, rlv, cpv, mb, despop, res);
-  renderHbars('chart-rec', D.receita_bruta, rb, 'var(--green)');
-  const todos = [...D.deducoes, ...D.cpv, ...D.despesas_op];
-  renderHbars('chart-cus', todos, rb, 'var(--red)');
+  waterfall(rb, ded, rlv, cpv, mb, despop, res);
+  hbars('ch-rec', D.receita_bruta, 'var(--emerald)');
+  hbars('ch-cus', [...D.deducoes, ...D.cpv, ...D.despesas_op], 'var(--rose)');
 
   // Margens
-  renderMargens(rb, ded, rlv, cpv, mb, despop, res);
+  margens(rb, ded, rlv, cpv, mb, despop, res);
 }
 
-function renderRows(id, arr, base, neg) {
+function rows(id, arr, base, neg) {
   document.getElementById(id).innerHTML = arr.map(r => `
-    <div class="dre-row">
-      <span class="row-name">${r.n}</span>
-      <span class="row-pct">${P(r.v,base)}</span>
-      <span class="row-val${neg?' neg':''}">${neg?'('+R(r.v)+')':R(r.v)}</span>
+    <div class="acc-row">
+      <span class="row-label">${r.n}</span>
+      <span class="row-share">${Pn(r.v, base)}</span>
+      <span class="row-amount${neg ? ' neg' : ''}">${neg ? '(' + R(r.v) + ')' : R(r.v)}</span>
     </div>
   `).join('');
 }
 
-function renderWaterfall(rb, ded, rlv, cpv, mb, despop, res) {
-  const MAX = 172;
-  const ref = rb;
+function waterfall(rb, ded, rlv, cpv, mb, despop, res) {
+  const MAX = 178, REF = rb;
   const cols = [
-    { l:'Rec. Bruta', v:rb,          t:'g' },
-    { l:'Impostos+\nTaxas',  v:ded,  t:'r' },
-    { l:'RLV',        v:rlv,         t:'g' },
-    { l:'CPV',        v:cpv,         t:'r' },
-    { l:'M. Bruta',   v:mb,          t:'a' },
-    { l:'Desp. Op.',  v:despop,      t:'r' },
-    { l:'Resultado',  v:Math.abs(res), t: res>=0?'g':'r' },
+    { l: 'Rec.\nBruta',  v: rb,            c: 'we' },
+    { l: 'Ded. +\nImp.', v: ded,           c: 'wr' },
+    { l: 'RLV',          v: rlv,           c: 'we' },
+    { l: 'CPV',          v: cpv,           c: 'wr' },
+    { l: 'M.\nBruta',    v: mb,            c: 'wa' },
+    { l: 'Desp.\nOp.',   v: despop,        c: 'wr' },
+    { l: 'Result.',      v: Math.abs(res), c: res >= 0 ? 'we' : 'wr' },
   ];
-  document.getElementById('waterfall').innerHTML = cols.map(c => {
-    const h = Math.max(3, Math.round((c.v/ref)*MAX));
-    const nc = c.t==='g'?'ng':c.t==='r'?'nr':c.t==='a'?'na':'np';
-    const bc = 'b'+c.t;
+  const nc = { we: 'c-emerald', wr: 'c-rose', wa: 'c-amber' };
+  document.getElementById('wf').innerHTML = cols.map(col => {
+    const h = Math.max(4, Math.round((col.v / REF) * MAX));
     return `<div class="wf-col">
-      <div class="wf-wrap">
-        <div class="wf-bar ${bc}" style="height:${h}px;">
-          <span class="wf-num ${nc}">${(c.v/1000).toFixed(1)}k</span>
+      <div class="wf-inner">
+        <div class="wf-bar ${col.c}" style="height:${h}px;">
+          <span class="wf-num ${nc[col.c]}">${(col.v / 1000).toFixed(1)}k</span>
         </div>
       </div>
-      <span class="wf-lbl">${c.l}</span>
+      <span class="wf-lbl">${col.l}</span>
     </div>`;
   }).join('');
 }
 
-function renderHbars(id, arr, base, cor) {
-  const sorted = [...arr].sort((a,b)=>b.v-a.v).slice(0,8);
+function hbars(id, arr, cor) {
+  const sorted = [...arr].sort((a, b) => b.v - a.v).slice(0, 8);
   const total  = S(sorted);
   document.getElementById(id).innerHTML = sorted.map(r => {
-    const p = total ? r.v/total*100 : 0;
-    return `<div class="hbar-row">
-      <span class="hbar-name">${r.n}</span>
-      <div class="hbar-track"><div class="hbar-fill" style="width:${p}%;background:${cor};"></div></div>
-      <span class="hbar-pct">${p.toFixed(0)}%</span>
-      <span class="hbar-val">${R(r.v)}</span>
+    const p = total ? r.v / total * 100 : 0;
+    return `<div class="hb-row">
+      <span class="hb-name">${r.n}</span>
+      <div class="hb-track"><div class="hb-fill" style="width:${p}%;background:${cor}"></div></div>
+      <span class="hb-pct">${p.toFixed(0)}%</span>
+      <span class="hb-val">${R(r.v)}</span>
     </div>`;
   }).join('');
 }
 
-function renderMargens(rb, ded, rlv, cpv, mb, despop, res) {
-  const rows = [
-    { n:'Receita Bruta',          v:rb,     c:'hi'  },
-    { n:'Deduções / Impostos',    v:-ded,   c:'neg' },
-    { n:'Receita Líquida (RLV)',  v:rlv,    c:'hi'  },
-    { n:'Custos do Produto (CPV)',v:-cpv,   c:'neg' },
-    { n:'Margem Bruta',           v:mb,     c:'hi'  },
-    { n:'Despesas Operacionais',  v:-despop,c:'neg' },
-    { n:'Resultado Líquido',      v:res,    c: res>=0?'pos':'neg' },
+function margens(rb, ded, rlv, cpv, mb, despop, res) {
+  const defs = [
+    { n: 'Receita Bruta',           v: rb,     hi: true  },
+    { n: 'Deduções / Impostos',     v: ded,    neg: true },
+    { n: 'Receita Líquida (RLV)',   v: rlv,    hi: true  },
+    { n: 'Custos do Produto (CPV)', v: cpv,    neg: true },
+    { n: 'Margem Bruta',            v: mb,     hi: true  },
+    { n: 'Despesas Operacionais',   v: despop, neg: true },
+    { n: 'Resultado Líquido',       v: res,    final: true },
   ];
-  const refs = ['100%','< 22%','> 78%','< 30%','> 45%','< 15%','> 20%'];
-  document.getElementById('mt-rows').innerHTML = rows.map((r,i) => `
-    <div class="mt-row">
-      <span>${r.n}</span>
-      <span class="${r.c}">${R(Math.abs(r.v))}</span>
-      <span class="${r.c}">${K(Math.abs(r.v),rb)}%</span>
-      <span class="${r.c}">${K(Math.abs(r.v),rlv)}%</span>
+  const refs = ['100%', '< 22%', '> 78%', '< 30%', '> 45%', '< 15%', '> 20%'];
+
+  document.getElementById('mg-rows').innerHTML = defs.map((d, i) => {
+    const cls = d.hi || d.final ? 'hi' : d.neg ? 'neg' : '';
+    const vCls = d.final ? (res >= 0 ? 'pos' : 'neg') : cls;
+    return `<div class="mg-row${d.hi || d.final ? ' highlight' : ''}">
+      <span>${d.n}</span>
+      <span class="${vCls}">${R(Math.abs(d.v))}</span>
+      <span class="${vCls}">${Pn(Math.abs(d.v), rb)}</span>
+      <span class="${vCls}">${Pn(Math.abs(d.v), rlv)}</span>
       <span class="ref">${refs[i]}</span>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 
-  const mgL = rb ? res/rb*100 : 0;
-  const mgB = rb ? mb/rb*100  : 0;
-  let txt = '';
-  if(mgL >= 25) txt = `<b style="color:var(--green)">✓ Resultado excelente.</b> Margem líquida de ${mgL.toFixed(1)}% demonstra produto altamente eficiente. Custos bem controlados em relação à receita gerada.`;
-  else if(mgL >= 15) txt = `<b style="color:var(--green)">✓ Resultado saudável.</b> Margem líquida de ${mgL.toFixed(1)}% está dentro do esperado para o segmento de capacitações online.`;
-  else if(mgL >= 0) txt = `<b style="color:var(--amber)">⚠ Resultado positivo, mas apertado.</b> Margem líquida de ${mgL.toFixed(1)}%. Vale revisar estrutura de custos para ampliar margem nas próximas edições.`;
-  else txt = `<b style="color:var(--red)">✗ Resultado negativo.</b> Margem líquida de ${mgL.toFixed(1)}%. Analisar receita realizada vs. projetada e identificar custos fora do planejado.`;
+  const mgL = rb ? res / rb * 100 : 0;
+  const mgB = rb ? mb / rb * 100  : 0;
+  const ef  = rb ? (ded + cpv + despop) / rb * 100 : 0;
 
-  txt += `<br><br>
-    <span style="color:var(--ink-light)">Margem Bruta: <b style="color:var(--ink)">${mgB.toFixed(1)}%</b> &nbsp;·&nbsp;
-    Margem Líquida: <b style="color:var(--ink)">${mgL.toFixed(1)}%</b> &nbsp;·&nbsp;
-    Custo total / Receita: <b style="color:var(--ink)">${K(ded+cpv+despop,rb)}%</b></span>
+  let verdict = '';
+  if (mgL >= 25)      verdict = `<strong style="color:var(--emerald)">Resultado excelente.</strong> Margem líquida de ${mgL.toFixed(1)}% demonstra produto altamente eficiente.`;
+  else if (mgL >= 15) verdict = `<strong style="color:var(--emerald)">Resultado saudável.</strong> Margem líquida de ${mgL.toFixed(1)}% dentro do esperado para o segmento de capacitações.`;
+  else if (mgL >= 0)  verdict = `<strong style="color:var(--amber)">Resultado positivo, mas apertado.</strong> Margem líquida de ${mgL.toFixed(1)}%. Vale revisar a estrutura de custos para as próximas edições.`;
+  else                verdict = `<strong style="color:var(--rose)">Resultado negativo.</strong> Margem líquida de ${mgL.toFixed(1)}%. Analisar receita realizada vs. projetada e custos fora do planejado.`;
+
+  document.getElementById('analysis-body').innerHTML = `
+    ${verdict}
     <br><br>
-    <span style="color:var(--amber);font-size:0.78rem;">⚠ Valores de salários são provisórios (1 mês). O resultado definitivo depende da confirmação do período real de competência.</span>
+    Margem Bruta: <strong>${mgB.toFixed(1)}%</strong> &nbsp;·&nbsp;
+    Margem Líquida: <strong>${mgL.toFixed(1)}%</strong> &nbsp;·&nbsp;
+    Custo total / Rec. Bruta: <strong>${ef.toFixed(1)}%</strong>
+    <br><br>
+    <span style="color:var(--amber);font-size:.78rem;">⚠ Salários provisionados em 1 mês. O resultado definitivo depende da confirmação do período de competência.</span>
   `;
-  document.getElementById('interp-body').innerHTML = txt;
 }
 
-function toggle(head) {
-  head.parentElement.classList.toggle('collapsed');
+// ═══════════════════════════════════════════
+//  UI
+// ═══════════════════════════════════════════
+function toggleGroup(header) {
+  header.closest('.dre-group').classList.toggle('open');
 }
 
-function switchTab(id, btn) {
+function tab(id, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
   btn.classList.add('active');
 }
 
-document.getElementById('hoje').textContent = new Date().toLocaleDateString('pt-BR');
 render();
 </script>
 </body>
