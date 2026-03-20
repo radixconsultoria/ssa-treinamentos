@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRE — Capacitação Psicanálise para a Vida</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:           #fafaf8;
+    --surface:      #ffffff;
+    --surface2:     #f5f4f0;
+    --border:       #e4e2db;
+    --border-mid:   #d0cec6;
+    --ink:          #1a1916;
+    --ink-mid:      #4a4840;
+    --ink-light:    #8a8778;
+    --ink-faint:    #b8b6ae;
+    --green:        #2d7a4f;
+    --green-bg:     #edf6f1;
+    --red:          #b84040;
+    --red-bg:       #fdf0f0;
+    --amber:        #b06820;
+    --amber-bg:     #fdf4ea;
+    --blue:         #2860a8;
+    --blue-bg:      #eef3fc;
+    --accent:       #5c4a8a;
+    --accent-bg:    #f2f0f8;
+    --radius:       3px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--ink);
+    padding: 36px 52px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.75rem;
+    color: var(--ink);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    max-width: 440px;
+  }
+  .header h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-meta {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--ink-light);
+    line-height: 2;
+    letter-spacing: 0.04em;
+  }
+  .header-meta strong { color: var(--ink-mid); font-weight: 500; }
+
+  /* ─── NAV ─── */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 52px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .tab {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 13px 20px 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--ink-mid); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ─── LAYOUT ─── */
+  .main { padding: 36px 52px 72px; max-width: 1100px; }
+  .panel { display: none; }
+  .panel.active { display: block; animation: up 0.3s ease; }
+  @keyframes up { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ─── ACTIONS ─── */
+  .actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-bottom: 28px;
+  }
+  .btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid var(--border-mid);
+    background: var(--surface);
+    color: var(--ink-light);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-radius: var(--radius);
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+
+  /* ─── KPI STRIP ─── */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 32px;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .kpi {
+    background: var(--surface);
+    padding: 20px 22px 18px;
+    position: relative;
+  }
+  .kpi::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .kpi.k-green::after  { background: var(--green); }
+  .kpi.k-red::after    { background: var(--red); }
+  .kpi.k-amber::after  { background: var(--amber); }
+  .kpi.k-accent::after { background: var(--accent); }
+
+  .kpi-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 10px;
+  }
+  .kpi-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .kpi.k-green .kpi-val  { color: var(--green); }
+  .kpi.k-red .kpi-val    { color: var(--red); }
+  .kpi.k-amber .kpi-val  { color: var(--amber); }
+  .kpi.k-accent .kpi-val { color: var(--accent); }
+
+  .kpi-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+  .kpi-sub b { color: var(--ink-light); }
+
+  /* ─── DRE SECTIONS ─── */
+  .dre-block { margin-bottom: 4px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+
+  .dre-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 20px;
+    background: var(--surface);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.1s;
+    border-bottom: 1px solid var(--border);
+  }
+  .dre-head:hover { background: var(--surface2); }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .dot-g { background: var(--green); }
+  .dot-r { background: var(--red); }
+  .dot-a { background: var(--amber); }
+
+  .dre-head-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    flex: 1;
+  }
+  .dre-head-total {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .ht-g { color: var(--green); }
+  .ht-r { color: var(--red); }
+  .ht-a { color: var(--amber); }
+
+  .toggle { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--ink-faint); margin-left: 10px; transition: transform 0.2s; }
+  .collapsed .toggle { transform: rotate(-90deg); }
+  .collapsed .dre-items { display: none; }
+
+  .dre-items { background: var(--surface); }
+
+  .dre-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 20px 9px 32px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    transition: background 0.1s;
+  }
+  .dre-row:last-child { border-bottom: none; }
+  .dre-row:hover { background: var(--surface2); }
+
+  .row-name {
+    font-size: 0.8rem;
+    color: var(--ink-mid);
+    flex: 1;
+  }
+  .row-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--ink-faint);
+    width: 52px;
+    text-align: right;
+  }
+  .row-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--ink);
+    width: 140px;
+    text-align: right;
+  }
+  .row-val.neg { color: var(--red); }
+
+  /* ─── SUBTOTAIS ─── */
+  .subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 20px;
+    margin: 6px 0;
+    border-radius: var(--radius);
+  }
+  .st-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .st-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+  }
+  .st-green { background: var(--green-bg); border-left: 3px solid var(--green); }
+  .st-green .st-label { color: var(--green); }
+  .st-green .st-val   { color: var(--green); }
+  .st-amber { background: var(--amber-bg); border-left: 3px solid var(--amber); }
+  .st-amber .st-label { color: var(--amber); }
+  .st-amber .st-val   { color: var(--amber); }
+  .st-blue  { background: var(--blue-bg); border-left: 3px solid var(--blue); }
+  .st-blue  .st-label { color: var(--blue); }
+  .st-blue  .st-val   { color: var(--blue); }
+
+  /* ─── RESULTADO ─── */
+  .resultado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 28px;
+    margin-top: 8px;
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+  }
+  .resultado::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+  }
+  .resultado.pos::before { background: var(--green); }
+  .resultado.neg::before { background: var(--red); }
+
+  .res-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+  .res-label .sub {
+    display: block;
+    font-size: 0.58rem;
+    color: var(--ink-faint);
+    margin-top: 4px;
+  }
+  .res-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .res-val.pos { color: var(--green); }
+  .res-val.neg { color: var(--red); }
+  .res-pct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ─── AVISO ─── */
+  .aviso {
+    background: #fffbea;
+    border: 1px solid #e8d070;
+    border-left: 3px solid #c9a830;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 0.76rem;
+    color: #7a6020;
+    margin-bottom: 20px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+  }
+  .aviso strong { font-weight: 600; }
+
+  /* ─── ANÁLISE VISUAL ─── */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .chart-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 20px;
+  }
+
+  /* Cascata */
+  .waterfall {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 200px;
+    padding-bottom: 28px;
+    position: relative;
+  }
+  .waterfall::after {
+    content: '';
+    position: absolute;
+    bottom: 28px; left: 0; right: 0;
+    height: 1px;
+    background: var(--border-mid);
+  }
+  .wf-col { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
+  .wf-bar {
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+    position: absolute;
+    bottom: 0;
+    min-height: 3px;
+    transition: opacity 0.15s;
+  }
+  .wf-bar:hover { opacity: 0.8; }
+  .wf-bar.bg { background: var(--green); }
+  .wf-bar.br { background: var(--red); }
+  .wf-bar.ba { background: var(--amber); }
+  .wf-bar.bp { background: var(--accent); }
+  .wf-wrap { width: 100%; position: relative; height: 172px; }
+  .wf-lbl {
+    position: absolute; bottom: -24px;
+    left: 50%; transform: translateX(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.5rem; color: var(--ink-faint);
+    white-space: nowrap; letter-spacing: 0.04em;
+    text-align: center;
+  }
+  .wf-num {
+    position: absolute; top: -17px;
+    left: 50%; transform: translateX(-50%);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem; white-space: nowrap;
+  }
+  .wf-num.ng { color: var(--green); }
+  .wf-num.nr { color: var(--red); }
+  .wf-num.na { color: var(--amber); }
+  .wf-num.np { color: var(--accent); }
+
+  /* Barras horizontais */
+  .hbar-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 9px;
+  }
+  .hbar-name { font-size: 0.74rem; color: var(--ink-mid); width: 190px; flex-shrink: 0; }
+  .hbar-track { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .hbar-fill  { height: 100%; border-radius: 3px; }
+  .hbar-pct   { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--ink-faint); width: 42px; text-align: right; }
+  .hbar-val   { font-family: 'IBM Plex Mono', monospace; font-size: 0.6rem; color: var(--ink-light); width: 90px; text-align: right; }
+
+  /* ─── MARGENS ─── */
+  .mt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .mt-head {
+    display: grid;
+    grid-template-columns: 1fr 130px 100px 100px 90px;
+    padding: 10px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .mt-head span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.58rem; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-faint);
+    text-align: right;
+  }
+  .mt-head span:first-child { text-align: left; }
+  .mt-row {
+    display: grid;
+    grid-template-columns: 1fr 130px 100px 100px 90px;
+    padding: 11px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .mt-row:last-child { border-bottom: none; }
+  .mt-row:hover { background: var(--surface2); }
+  .mt-row span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73rem; color: var(--ink-light);
+    text-align: right;
+  }
+  .mt-row span:first-child { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.8rem; color: var(--ink); text-align: left; font-weight: 400; }
+  .mt-row span.hi  { color: var(--accent); font-weight: 500; }
+  .mt-row span.pos { color: var(--green); }
+  .mt-row span.neg { color: var(--red); }
+  .mt-row span.ref { color: var(--ink-faint); font-size: 0.65rem; }
+
+  /* ─── INTERPRETAÇÃO ─── */
+  .interp {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .interp-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-light);
+    margin-bottom: 14px;
+  }
+  .interp-body { font-size: 0.82rem; color: var(--ink-mid); line-height: 1.75; }
+
+  /* ─── NOTAS ─── */
+  .nota-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 14px;
+  }
+  .nota-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-light);
+    margin-bottom: 12px;
+  }
+  textarea.nota-input {
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border-mid); color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem; padding: 12px 14px;
+    resize: vertical; min-height: 110px;
+    line-height: 1.65; outline: none; border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+  textarea.nota-input:focus { border-color: var(--accent); }
+  textarea.nota-input::placeholder { color: var(--ink-faint); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 820px) {
+    .header, .nav, .main { padding-left: 20px; padding-right: 20px; }
+    .kpis { grid-template-columns: 1fr 1fr; }
+    .mt-head, .mt-row { grid-template-columns: 1fr 120px 90px; }
+    .mt-head span:nth-child(4), .mt-row span:nth-child(4),
+    .mt-head span:nth-child(5), .mt-row span:nth-child(5) { display: none; }
+  }
+
+  @media print {
+    .actions, .nav { display: none !important; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px;">Demonstrativo de Resultado</div>
+    <h1>Capacitação <em>Psicanálise</em><br>para a Vida</h1>
+  </div>
+  <div class="header-meta">
+    Período: <strong>Jan – Mar / 2026</strong><br>
+    Elaborado: <strong id="hoje"></strong><br>
+    Status: <strong style="color:var(--amber);">⚠ Salários provisionados (1 mês)</strong>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="tab active" onclick="switchTab('dre',this)">DRE</button>
+  <button class="tab" onclick="switchTab('visual',this)">Visual</button>
+  <button class="tab" onclick="switchTab('margens',this)">Margens</button>
+  <button class="tab" onclick="switchTab('notas',this)">Notas</button>
+</div>
+
+<div class="main">
+
+  <div class="actions">
+    <button class="btn" onclick="window.print()">↓ Exportar PDF</button>
+    <button class="btn primary" onclick="render()">↺ Recalcular</button>
+  </div>
+
+  <!-- ══ PAINEL DRE ══ -->
+  <div class="panel active" id="panel-dre">
+
+    <div class="aviso" id="aviso-bloco">
+      <strong>⚠ Provisório:</strong> salários lançados com base em 1 mês (50% de cada colaborador). Confirmar número de meses para valor definitivo.
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <!-- Receita Bruta -->
+    <div class="dre-block">
+      <div class="dre-head" onclick="toggle(this)">
+        <span class="dot dot-g"></span>
+        <span class="dre-head-title">1 · Receita Bruta</span>
+        <span class="dre-head-total ht-g" id="h-rb">—</span>
+        <span class="toggle">▾</span>
+      </div>
+      <div class="dre-items" id="i-rb"></div>
+    </div>
+
+    <!-- Deduções -->
+    <div class="dre-block">
+      <div class="dre-head" onclick="toggle(this)">
+        <span class="dot dot-r"></span>
+        <span class="dre-head-title">2 · Deduções e Impostos</span>
+        <span class="dre-head-total ht-r" id="h-ded">—</span>
+        <span class="toggle">▾</span>
+      </div>
+      <div class="dre-items" id="i-ded"></div>
+    </div>
+
+    <div class="subtotal st-green" id="st-rlv">
+      <span class="st-label">= Receita Líquida (RLV)</span>
+      <span class="st-val">—</span>
+    </div>
+
+    <!-- CPV -->
+    <div class="dre-block">
+      <div class="dre-head" onclick="toggle(this)">
+        <span class="dot dot-r"></span>
+        <span class="dre-head-title">3 · Custos do Produto (CPV)</span>
+        <span class="dre-head-total ht-r" id="h-cpv">—</span>
+        <span class="toggle">▾</span>
+      </div>
+      <div class="dre-items" id="i-cpv"></div>
+    </div>
+
+    <div class="subtotal st-amber" id="st-mb">
+      <span class="st-label">= Margem Bruta</span>
+      <span class="st-val">—</span>
+    </div>
+
+    <!-- Despesas Operacionais -->
+    <div class="dre-block">
+      <div class="dre-head" onclick="toggle(this)">
+        <span class="dot dot-r"></span>
+        <span class="dre-head-title">4 · Despesas Operacionais</span>
+        <span class="dre-head-total ht-r" id="h-despop">—</span>
+        <span class="toggle">▾</span>
+      </div>
+      <div class="dre-items" id="i-despop"></div>
+    </div>
+
+    <div class="resultado" id="resultado">
+      <div>
+        <div class="res-label">
+          Resultado Líquido
+          <span class="sub">Lucro / Prejuízo do Período</span>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div class="res-val" id="res-val">—</div>
+        <div class="res-pct" id="res-pct">—</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ PAINEL VISUAL ══ -->
+  <div class="panel" id="panel-visual">
+
+    <div class="chart-card">
+      <div class="chart-title">Cascata de Resultado</div>
+      <div class="waterfall" id="waterfall"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="chart-card">
+        <div class="chart-title">Composição da Receita Bruta</div>
+        <div id="chart-rec"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Composição dos Custos Totais</div>
+        <div id="chart-cus"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ PAINEL MARGENS ══ -->
+  <div class="panel" id="panel-margens">
+    <div class="mt">
+      <div class="mt-head">
+        <span>Indicador</span>
+        <span>R$</span>
+        <span>% Rec. Bruta</span>
+        <span>% RLV</span>
+        <span>Ref. Setor</span>
+      </div>
+      <div id="mt-rows"></div>
+    </div>
+    <div class="interp">
+      <div class="interp-title">Análise</div>
+      <div class="interp-body" id="interp-body">—</div>
+    </div>
+  </div>
+
+  <!-- ══ PAINEL NOTAS ══ -->
+  <div class="panel" id="panel-notas">
+    <div class="nota-card">
+      <div class="nota-label">Notas e Observações</div>
+      <textarea class="nota-input" placeholder="Registre premissas, ajustes, contexto do produto, acordos comerciais, critérios de rateio...
+
+Ex: Salários provisionados em 1 mês. Aguardando confirmação da competência real para lançamento definitivo."></textarea>
+    </div>
+    <div class="nota-card">
+      <div class="nota-label">Itens Pendentes / A Confirmar</div>
+      <textarea class="nota-input" style="min-height:80px;" placeholder="- Número de meses dos salários (Hanon, Marcelo, Samir)&#10;- Confirmar se taxas de pagamento já incluem todos os meses&#10;- Verificar custo de tráfego (informado como zero)"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════
+//  DADOS REAIS
+// ═══════════════════════════════════════
+const D = {
+  receita_bruta: [
+    { n: 'Receita de Vendas — Jan/2026',  v: 189473.40 },
+    { n: 'Receita de Vendas — Fev/2026',  v: 58236.16  },
+    { n: 'Receita de Vendas — Mar/2026',  v: 8144.30   },
+  ],
+  deducoes: [
+    { n: 'Impostos (14% s/ receita bruta)', v: 255853.86 * 0.14 },
+    { n: 'Taxas de meios de pagamento',     v: 16406.58  },
+  ],
+  cpv: [
+    { n: 'Mônica Veras (mentora)',          v: 23067.65  },
+    { n: 'Zoom',                            v: 729.00    },
+    { n: 'Comissões (5% s/ receita bruta)', v: 255853.86 * 0.05 },
+  ],
+  despesas_op: [
+    { n: 'Salário Hanon (50% / 1 mês)',    v: 15000 * 0.50 },
+    { n: 'Salário Marcelo (50% / 1 mês)',  v: 7500  * 0.50 },
+    { n: 'Salário Samir (50% / 1 mês)',    v: 24000 * 0.50 },
+  ],
+};
+
+// ═══════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════
+const R = v => 'R$ ' + v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const P = (v,b) => b ? (v/b*100).toFixed(1)+'%' : '—';
+const S = a => a.reduce((t,x)=>t+(parseFloat(x.v)||0),0);
+const K = (v,b) => b ? (v/b*100).toFixed(1) : '—';
+
+// ═══════════════════════════════════════
+//  RENDER PRINCIPAL
+// ═══════════════════════════════════════
+function render() {
+  const rb     = S(D.receita_bruta);
+  const ded    = S(D.deducoes);
+  const rlv    = rb - ded;
+  const cpv    = S(D.cpv);
+  const mb     = rlv - cpv;
+  const despop = S(D.despesas_op);
+  const res    = mb - despop;
+
+  // KPIs
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi k-green">
+      <div class="kpi-label">Receita Bruta</div>
+      <div class="kpi-val">${R(rb)}</div>
+      <div class="kpi-sub">3 meses acumulados</div>
+    </div>
+    <div class="kpi k-red">
+      <div class="kpi-label">Total Deduções + Impostos</div>
+      <div class="kpi-val">${R(ded)}</div>
+      <div class="kpi-sub"><b>${P(ded,rb)}</b> da rec. bruta</div>
+    </div>
+    <div class="kpi k-amber">
+      <div class="kpi-label">Margem Bruta</div>
+      <div class="kpi-val">${R(mb)}</div>
+      <div class="kpi-sub"><b>${P(mb,rb)}</b> da rec. bruta</div>
+    </div>
+    <div class="kpi k-accent">
+      <div class="kpi-label">Resultado Líquido</div>
+      <div class="kpi-val" style="color:${res>=0?'var(--green)':'var(--red)'}">${R(res)}</div>
+      <div class="kpi-sub"><b>${P(res,rb)}</b> da rec. bruta</div>
+    </div>
+  `;
+
+  // Seções
+  renderRows('i-rb',     D.receita_bruta, rb, false);
+  renderRows('i-ded',    D.deducoes,      rb, true);
+  renderRows('i-cpv',    D.cpv,           rb, true);
+  renderRows('i-despop', D.despesas_op,   rb, true);
+
+  document.getElementById('h-rb').textContent     = R(rb);
+  document.getElementById('h-ded').textContent    = '('+R(ded)+')';
+  document.getElementById('h-cpv').textContent    = '('+R(cpv)+')';
+  document.getElementById('h-despop').textContent = '('+R(despop)+')';
+
+  // Subtotais
+  document.querySelector('#st-rlv .st-val').textContent = R(rlv);
+  document.querySelector('#st-mb  .st-val').textContent = R(mb);
+
+  // Resultado final
+  const rEl  = document.getElementById('res-val');
+  const rPct = document.getElementById('res-pct');
+  const rBox = document.getElementById('resultado');
+  rEl.textContent  = R(res);
+  rPct.textContent = P(res,rb) + ' da receita bruta';
+  rEl.className    = 'res-val ' + (res>=0?'pos':'neg');
+  rPct.style.color = res>=0 ? 'var(--green)' : 'var(--red)';
+  rBox.className   = 'resultado ' + (res>=0?'pos':'neg');
+
+  // Visual
+  renderWaterfall(rb, ded, rlv, cpv, mb, despop, res);
+  renderHbars('chart-rec', D.receita_bruta, rb, 'var(--green)');
+  const todos = [...D.deducoes, ...D.cpv, ...D.despesas_op];
+  renderHbars('chart-cus', todos, rb, 'var(--red)');
+
+  // Margens
+  renderMargens(rb, ded, rlv, cpv, mb, despop, res);
+}
+
+function renderRows(id, arr, base, neg) {
+  document.getElementById(id).innerHTML = arr.map(r => `
+    <div class="dre-row">
+      <span class="row-name">${r.n}</span>
+      <span class="row-pct">${P(r.v,base)}</span>
+      <span class="row-val${neg?' neg':''}">${neg?'('+R(r.v)+')':R(r.v)}</span>
+    </div>
+  `).join('');
+}
+
+function renderWaterfall(rb, ded, rlv, cpv, mb, despop, res) {
+  const MAX = 172;
+  const ref = rb;
+  const cols = [
+    { l:'Rec. Bruta', v:rb,          t:'g' },
+    { l:'Impostos+\nTaxas',  v:ded,  t:'r' },
+    { l:'RLV',        v:rlv,         t:'g' },
+    { l:'CPV',        v:cpv,         t:'r' },
+    { l:'M. Bruta',   v:mb,          t:'a' },
+    { l:'Desp. Op.',  v:despop,      t:'r' },
+    { l:'Resultado',  v:Math.abs(res), t: res>=0?'g':'r' },
+  ];
+  document.getElementById('waterfall').innerHTML = cols.map(c => {
+    const h = Math.max(3, Math.round((c.v/ref)*MAX));
+    const nc = c.t==='g'?'ng':c.t==='r'?'nr':c.t==='a'?'na':'np';
+    const bc = 'b'+c.t;
+    return `<div class="wf-col">
+      <div class="wf-wrap">
+        <div class="wf-bar ${bc}" style="height:${h}px;">
+          <span class="wf-num ${nc}">${(c.v/1000).toFixed(1)}k</span>
+        </div>
+      </div>
+      <span class="wf-lbl">${c.l}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderHbars(id, arr, base, cor) {
+  const sorted = [...arr].sort((a,b)=>b.v-a.v).slice(0,8);
+  const total  = S(sorted);
+  document.getElementById(id).innerHTML = sorted.map(r => {
+    const p = total ? r.v/total*100 : 0;
+    return `<div class="hbar-row">
+      <span class="hbar-name">${r.n}</span>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${p}%;background:${cor};"></div></div>
+      <span class="hbar-pct">${p.toFixed(0)}%</span>
+      <span class="hbar-val">${R(r.v)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderMargens(rb, ded, rlv, cpv, mb, despop, res) {
+  const rows = [
+    { n:'Receita Bruta',          v:rb,     c:'hi'  },
+    { n:'Deduções / Impostos',    v:-ded,   c:'neg' },
+    { n:'Receita Líquida (RLV)',  v:rlv,    c:'hi'  },
+    { n:'Custos do Produto (CPV)',v:-cpv,   c:'neg' },
+    { n:'Margem Bruta',           v:mb,     c:'hi'  },
+    { n:'Despesas Operacionais',  v:-despop,c:'neg' },
+    { n:'Resultado Líquido',      v:res,    c: res>=0?'pos':'neg' },
+  ];
+  const refs = ['100%','< 22%','> 78%','< 30%','> 45%','< 15%','> 20%'];
+  document.getElementById('mt-rows').innerHTML = rows.map((r,i) => `
+    <div class="mt-row">
+      <span>${r.n}</span>
+      <span class="${r.c}">${R(Math.abs(r.v))}</span>
+      <span class="${r.c}">${K(Math.abs(r.v),rb)}%</span>
+      <span class="${r.c}">${K(Math.abs(r.v),rlv)}%</span>
+      <span class="ref">${refs[i]}</span>
+    </div>
+  `).join('');
+
+  const mgL = rb ? res/rb*100 : 0;
+  const mgB = rb ? mb/rb*100  : 0;
+  let txt = '';
+  if(mgL >= 25) txt = `<b style="color:var(--green)">✓ Resultado excelente.</b> Margem líquida de ${mgL.toFixed(1)}% demonstra produto altamente eficiente. Custos bem controlados em relação à receita gerada.`;
+  else if(mgL >= 15) txt = `<b style="color:var(--green)">✓ Resultado saudável.</b> Margem líquida de ${mgL.toFixed(1)}% está dentro do esperado para o segmento de capacitações online.`;
+  else if(mgL >= 0) txt = `<b style="color:var(--amber)">⚠ Resultado positivo, mas apertado.</b> Margem líquida de ${mgL.toFixed(1)}%. Vale revisar estrutura de custos para ampliar margem nas próximas edições.`;
+  else txt = `<b style="color:var(--red)">✗ Resultado negativo.</b> Margem líquida de ${mgL.toFixed(1)}%. Analisar receita realizada vs. projetada e identificar custos fora do planejado.`;
+
+  txt += `<br><br>
+    <span style="color:var(--ink-light)">Margem Bruta: <b style="color:var(--ink)">${mgB.toFixed(1)}%</b> &nbsp;·&nbsp;
+    Margem Líquida: <b style="color:var(--ink)">${mgL.toFixed(1)}%</b> &nbsp;·&nbsp;
+    Custo total / Receita: <b style="color:var(--ink)">${K(ded+cpv+despop,rb)}%</b></span>
+    <br><br>
+    <span style="color:var(--amber);font-size:0.78rem;">⚠ Valores de salários são provisórios (1 mês). O resultado definitivo depende da confirmação do período real de competência.</span>
+  `;
+  document.getElementById('interp-body').innerHTML = txt;
+}
+
+function toggle(head) {
+  head.parentElement.classList.toggle('collapsed');
+}
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+document.getElementById('hoje').textContent = new Date().toLocaleDateString('pt-BR');
+render();
+</script>
+</body>
+</html>
