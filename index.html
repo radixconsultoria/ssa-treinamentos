@@ -821,13 +821,13 @@ const D = {
     { n: 'Receita de Vendas — Mar/2026', v: 8144.30   },
   ],
   deducoes: [
-    { n: 'Impostos (14% s/ receita bruta)', v: 255853.86 * 0.14 },
-    { n: 'Taxas de meios de pagamento',     v: 16406.58          },
+    { n: 'Impostos (14% s/ receita bruta)', pct: 0.14 },
+    { n: 'Taxas de meios de pagamento',     v: 16406.58 },
   ],
   cpv: [
-    { n: 'Mônica Veras — Mentora',          v: 23067.65          },
-    { n: 'Zoom',                             v: 729.00            },
-    { n: 'Comissões (5% s/ receita bruta)', v: 255853.86 * 0.05 },
+    { n: 'Mônica Veras — Mentora',          v: 23067.65 },
+    { n: 'Zoom',                             v: 729.00   },
+    { n: 'Comissões (5% s/ receita bruta)', pct: 0.05   },
   ],
   despesas_op: [
     { n: 'Salário Hanon (50% · 1 mês)',   v: 15000 * 0.50 },
@@ -841,23 +841,34 @@ const D = {
 // ═══════════════════════════════════════════
 const R  = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const Pn = (v, b) => b ? (v / b * 100).toFixed(1) + '%' : '—';
-const S  = a => a.reduce((t, x) => t + (parseFloat(x.v) || 0), 0);
+const S  = (a, rb) => a.reduce((t, x) => t + (x.pct ? (rb || 0) * x.pct : (parseFloat(x.v) || 0)), 0);
+// resolve valores percentuais antes de usar o array nas linhas
+function resolve(arr, rb) { return arr.map(x => x.pct ? { n: x.n, v: rb * x.pct } : x); }
 
 // ═══════════════════════════════════════════
 //  RENDER
 // ═══════════════════════════════════════════
 function render() {
-  const rb     = S(D.receita_bruta);
-  const ded    = S(D.deducoes);
+  const rb     = S(D.receita_bruta, 0);
+  const dedArr = resolve(D.deducoes, rb);
+  const cpvArr = resolve(D.cpv, rb);
+  const ded    = S(dedArr, 0);
   const rlv    = rb - ded;
-  const cpv    = S(D.cpv);
+  const cpv    = S(cpvArr, 0);
   const mb     = rlv - cpv;
-  const despop = S(D.despesas_op);
+  const despop = S(D.despesas_op, 0);
   const res    = mb - despop;
 
+  // Badges dinâmicos
+  document.querySelector('#g-rb   .acc-badge').textContent = D.receita_bruta.length + ' lançamentos';
+  document.querySelector('#g-ded  .acc-badge').textContent = D.deducoes.length      + ' lançamentos';
+  document.querySelector('#g-cpv  .acc-badge').textContent = D.cpv.length           + ' lançamentos';
+  document.querySelector('#g-despop .acc-badge').textContent = D.despesas_op.length + ' lançamentos';
+
   // KPIs
+  const meses = D.receita_bruta.length + ' ' + (D.receita_bruta.length === 1 ? 'mês acumulado' : 'meses acumulados');
   const kpis = [
-    { tag: 'Receita Bruta',       val: R(rb),   sub: '3 meses acumulados',              c: 'emerald' },
+    { tag: 'Receita Bruta',       val: R(rb),   sub: meses,                                 c: 'emerald' },
     { tag: 'Deduções + Impostos', val: R(ded),  sub: `<b>${Pn(ded,rb)}</b> da rec. bruta`, c: 'rose' },
     { tag: 'Margem Bruta',        val: R(mb),   sub: `<b>${Pn(mb,rb)}</b> da rec. bruta`,  c: 'amber' },
     { tag: 'Resultado Líquido',   val: R(res),  sub: `<b>${Pn(res,rb)}</b> da rec. bruta`, c: res>=0?'emerald':'rose' },
@@ -873,8 +884,8 @@ function render() {
 
   // Linhas
   rows('b-rb',     D.receita_bruta, rb, false);
-  rows('b-ded',    D.deducoes,      rb, true);
-  rows('b-cpv',    D.cpv,           rb, true);
+  rows('b-ded',    dedArr,          rb, true);
+  rows('b-cpv',    cpvArr,          rb, true);
   rows('b-despop', D.despesas_op,   rb, true);
 
   // Totais
@@ -898,7 +909,7 @@ function render() {
   // Visual
   waterfall(rb, ded, rlv, cpv, mb, despop, res);
   hbars('ch-rec', D.receita_bruta, 'var(--emerald)');
-  hbars('ch-cus', [...D.deducoes, ...D.cpv, ...D.despesas_op], 'var(--rose)');
+  hbars('ch-cus', [...dedArr, ...cpvArr, ...D.despesas_op], 'var(--rose)');
 
   // Margens
   margens(rb, ded, rlv, cpv, mb, despop, res);
